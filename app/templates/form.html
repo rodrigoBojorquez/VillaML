@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Evaluación</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <form action="/run" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full max-w-2xl space-y-4">
+        <h2 class="text-2xl font-bold mb-4 text-center">Formulario de Redes Sociales</h2>
+
+        <input type="hidden" name="model_name" value="{{ archivo }}">
+
+        <div>
+            <label for="age" class="block text-gray-700 font-bold mb-2">Edad</label>
+            <input type="number" name="age" id="age" required min="10" max="100" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <div>
+            <label for="gender" class="block text-gray-700 font-bold mb-2">Género</label>
+            <select name="gender" id="gender" required class="w-full px-4 py-2 border rounded">
+                <option value="">Selecciona</option>
+                <option value="1">Femenino</option>
+                <option value="0">Masculino</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="academic_level" class="block text-gray-700 font-bold mb-2">Nivel académico</label>
+            <select name="academic_level" id="academic_level" required class="w-full px-4 py-2 border rounded">
+                <option value="">Selecciona</option>
+                <option value="0">Preparatoria</option>
+                <option value="1">Estudios Universitarios</option>
+                <option value="2">Graduado</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="country" class="block text-gray-700 font-bold mb-2">País</label>
+            <input type="text" name="country" id="country" required class="w-full px-4 py-2 border rounded">
+            <!-- Alternativamente: un select con países codificados -->
+        </div>
+
+        <div>
+            <label for="usage_hours" class="block text-gray-700 font-bold mb-2">Uso diario (horas)</label>
+            <input type="number" step="0.1" min="0" max="24" name="usage_hours" id="usage_hours" required class="w-full px-4 py-2 border rounded">
+        </div>
+
+        <div>
+            <label for="platform" class="block text-gray-700 font-bold mb-2">Plataforma más usada</label>
+            <select name="platform" id="platform" required class="w-full px-4 py-2 border rounded">
+                <option value="">Selecciona</option>
+                <option value="0">Facebook</option>
+                <option value="1">Instagram</option>
+                <option value="2">TikTok</option>
+                <option value="3">Twitter</option>
+                <option value="4">YouTube</option>
+                <option value="5">LinkedIn</option>
+                <option value="6">Snapchat</option>
+                <option value="7">Line</option>
+                <option value="8">KakaoTalk</option>
+                <option value="9">VKontakte</option>
+                <option value="10">WhatsApp</option>
+                <option value="11">WeChat</option>
+            </select>
+        </div>
+
+        <div>
+            <label class="block text-gray-700 font-bold mb-2">¿Afecta tu rendimiento académico?</label>
+            <div class="flex gap-4">
+                <label><input type="radio" name="academic_impact" value="1" required> Sí</label>
+                <label><input type="radio" name="academic_impact" value="0"> No</label>
+            </div>
+        </div>
+
+        <div>
+            <label for="sleep_hours" class="block text-gray-700 font-bold mb-2">¿Cuantas horas duermes en la noche?</label>
+            <input type="number" step="0.1" min="0" max="12" name="sleep_hours" id="sleep_hours" required class="w-full px-4 py-2 border rounded">
+        </div>
+
+
+        <div>
+            <label for="relationship" class="block text-gray-700 font-bold mb-2">Estado de relación</label>
+            <select name="relationship" id="relationship" required class="w-full px-4 py-2 border rounded">
+                <option value="">Selecciona</option>
+                <option value="0">Complicado</option>
+                <option value="1">En una relación</option>
+                <option value="2">Soltero</option>
+            </select>
+        </div>
+
+        <!-- Conflictos por redes sociales -->
+        <div>
+            <label for="conflicts" class="block text-gray-700 font-bold mb-2">¿Cuantos conflictos has tenido en redes sociales?</label>
+            <input type="number" name="conflicts" id="conflicts" min="0" max="10" class="w-full px-4 py-2 border rounded">
+        </div>
+
+        <!-- Puntaje de adicción -->
+        <div>
+            <label for="addiction" class="block text-gray-700 font-bold mb-2">¿Que tan adicto te consideras? (1-10)</label>
+            <input type="number" name="addiction" id="addiction" min="1" max="10" required class="w-full px-4 py-2 border rounded">
+        </div>
+
+        <!-- Botón de envío -->
+        <div class="text-center">
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded">
+                Enviar respuestas
+            </button>
+        </div>
+    </form>
+</body>
+</html>
