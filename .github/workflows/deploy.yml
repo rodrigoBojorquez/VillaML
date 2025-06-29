@@ -1,0 +1,37 @@
+name: Deploy FastAPI to VPS
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+    - name: Configure SSH access
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.ACCESS_KEY }}" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+        ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+
+    - name: Transfer files to VPS
+      run: |
+        scp -vr ./* ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/var/www/villa.vortexsoftware.net/ || exit 1
+    
+
+    - name: SSH and deploy with Docker Compose
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.ACCESS_KEY }}
+        port: ${{ secrets.PORT}}
+        script: |
+          cd /var/www/villa.vortexsoftware.net/
+          docker compose down
+          docker compose up --build -d

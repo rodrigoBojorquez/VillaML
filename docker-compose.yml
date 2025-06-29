@@ -1,10 +1,13 @@
-version: "3.8"
-
 services:
   fastapi_app:
     build:
       context: .
-      dockerfile: Dockerfile
     ports:
-      - "8000:8000" 
+      - "8081:8000"
+    volumes:
+      - sqlite_data:/usr/src/app/app.db
     container_name: fastapi_container
+
+volumes:
+  sqlite_data:
+    name: sqlite_data
