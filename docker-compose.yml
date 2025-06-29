@@ -3,11 +3,7 @@ services:
     build:
       context: .
     ports:
-      - "8081:8000"
-    volumes:
-      - sqlite_data:/usr/src/app/app.db
+      - "8001:8000"
     container_name: fastapi_container
 
-volumes:
-  sqlite_data:
-    name: sqlite_data
+
