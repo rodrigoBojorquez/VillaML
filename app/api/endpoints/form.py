@@ -15,10 +15,9 @@ templates = Jinja2Templates(directory="app/templates")
 
 # GET → Muestra el formulario
 @router.get("", response_class=HTMLResponse)
-def mostrar_formulario(request: Request, archivo: str = "modelo-v1.pkl", success: Optional[bool] = False):
+def mostrar_formulario(request: Request, success: Optional[bool] = False):
     return templates.TemplateResponse("form.html", {
         "request": request,
-        "archivo": archivo,
         "success": success
     })
 
@@ -27,7 +26,6 @@ def mostrar_formulario(request: Request, archivo: str = "modelo-v1.pkl", success
 @router.post("")
 async def procesar_formulario(
     request: Request,
-    model_name: str = Form(...),
     age: float = Form(...),
     academic_level: int = Form(...),
     usage_hours: float = Form(...),
@@ -35,28 +33,7 @@ async def procesar_formulario(
     academic_impact: int = Form(...),
     conflict_level: int = Form(...)
 ):
-    datos = {
-        "modelo": model_name,
-        "edad": age,
-        "nivel": academic_level,
-        "uso_diario": usage_hours,
-        "sueno": sleep_hours,
-        "impacto": academic_impact,
-        "conflictos": conflict_level
-    }
-
-    # CSV
-    archivo_csv = Path("app/infrastructure/data/respuestas.csv")
-    archivo_csv.parent.mkdir(parents=True, exist_ok=True)
-    existe_csv = archivo_csv.exists()
-
-    with archivo_csv.open("a", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=datos.keys())
-        if not existe_csv:
-            writer.writeheader()
-        writer.writerow(datos)
-
-    # JSON
+    # Cargar datos anteriores si existen
     archivo_json = Path("app/infrastructure/data/respuestas.json")
     respuestas = []
 
@@ -67,8 +44,32 @@ async def procesar_formulario(
             except json.JSONDecodeError:
                 respuestas = []
 
-    respuestas.append(datos)
+    # Asignar ID autoincremental
+    nuevo_id = len(respuestas) + 1
 
+    datos_con_id = {
+        "id": nuevo_id,
+        "edad": age,
+        "nivel": academic_level,
+        "uso_diario": usage_hours,
+        "sueno": sleep_hours,
+        "impacto": academic_impact,
+        "conflictos": conflict_level
+    }
+
+    # Guardar en CSV
+    archivo_csv = Path("app/infrastructure/data/respuestas.csv")
+    archivo_csv.parent.mkdir(parents=True, exist_ok=True)
+    existe_csv = archivo_csv.exists()
+
+    with archivo_csv.open("a", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=datos_con_id.keys())
+        if not existe_csv:
+            writer.writeheader()
+        writer.writerow(datos_con_id)
+
+    # Guardar en JSON
+    respuestas.append(datos_con_id)
     with archivo_json.open("w") as jf:
         json.dump(respuestas, jf, indent=2, ensure_ascii=False)
 
@@ -90,3 +91,4 @@ def ver_respuestas():
             return JSONResponse(content={"error": "El archivo JSON está dañado."}, status_code=500)
     else:
         return JSONResponse(content={"mensaje": "No hay datos disponibles."}, status_code=404)
+
