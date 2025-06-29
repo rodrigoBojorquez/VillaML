@@ -1,112 +1,146 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Formulario de Evaluación</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Redes, rutina y realidad</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+    body {
+      font-family: "Montserrat Alternates", sans-serif;
+      background: #e0f2fe;
+      background-size: 80px 80px;
+      background-position: 0 0, 40px 40px;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
-    <form action="/run" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full max-w-2xl space-y-4">
-        <h2 class="text-2xl font-bold mb-4 text-center">Formulario de Redes Sociales</h2>
 
-        <input type="hidden" name="model_name" value="{{ archivo }}">
+<body class="min-h-screen flex items-center justify-center py-10 px-4">
+    
+  <form action="/form" method="POST" class="w-full max-w-2xl space-y-6">
+    
+    <!-- Campo oculto obligatorio para el backend -->
+    <input type="hidden" name="model_name" value="{{ archivo }}">
 
-        <div>
-            <label for="age" class="block text-gray-700 font-bold mb-2">Edad</label>
-            <input type="number" name="age" id="age" required min="10" max="100" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </div>
+    
+    <div class="bg-white rounded-3xl shadow-md p-6 md:p-10">
+      <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
+        Redes, rutina y realidad
+      </h1>
+      <p class="text-gray-600 text-sm md:text-base">
+        Refleja cómo las redes acompañan tu día
+      </p>
+      <p class="text-gray-600 text-sm mt-2">
+        Queremos conocer cómo forman parte de tu rutina las redes sociales: lo que te inspira,
+        te conecta o simplemente te entretiene. Esta encuesta busca entender tu experiencia digital
+        de forma cercana y respetuosa. Tu opinión nos ayuda a ver el impacto real de lo que
+        compartimos, vemos y vivimos en línea.
+      </p>
+    </div>
 
-        <div>
-            <label for="gender" class="block text-gray-700 font-bold mb-2">Género</label>
-            <select name="gender" id="gender" required class="w-full px-4 py-2 border rounded">
-                <option value="">Selecciona</option>
-                <option value="1">Femenino</option>
-                <option value="0">Masculino</option>
-            </select>
-        </div>
+    {% if success %}
+    <div class="bg-green-100 text-green-800 px-4 py-2 rounded mb-4 text-center">
+      ¡Gracias por compartir tu experiencia! 🖤
+    </div>
+    {% endif %}
 
-        <div>
-            <label for="academic_level" class="block text-gray-700 font-bold mb-2">Nivel académico</label>
-            <select name="academic_level" id="academic_level" required class="w-full px-4 py-2 border rounded">
-                <option value="">Selecciona</option>
-                <option value="0">Preparatoria</option>
-                <option value="1">Estudios Universitarios</option>
-                <option value="2">Graduado</option>
-            </select>
-        </div>
+    <!-- 1. Edad -->
+    <div class="bg-white rounded-2xl shadow-md p-6 space-y-2">
+      <label for="age" class="block font-bold text-lg text-gray-800">
+        1. ¿Cuántos años tienes?
+      </label>
+      <input type="number" name="age" id="age" placeholder="Ingresa tu edad" required min="10" max="100"
+        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
+    </div>
 
-        <div>
-            <label for="country" class="block text-gray-700 font-bold mb-2">País</label>
-            <input type="text" name="country" id="country" required class="w-full px-4 py-2 border rounded">
-            <!-- Alternativamente: un select con países codificados -->
-        </div>
+    <!-- 2. Nivel académico -->
+    <div class="bg-white rounded-2xl shadow-md p-6 space-y-2">
+      <label for="academic_level" class="block font-bold text-lg text-gray-800">
+        2. Nivel académico
+      </label>
+      <select name="academic_level" id="academic_level" required
+        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <option value="">Selecciona tu nivel académico</option>
+        <option value="0">Preparatoria</option>
+        <option value="1">Universidad – Licenciatura</option>
+        <option value="2">Universidad – Posgrado</option>
+      </select>
+    </div>
 
-        <div>
-            <label for="usage_hours" class="block text-gray-700 font-bold mb-2">Uso diario (horas)</label>
-            <input type="number" step="0.1" min="0" max="24" name="usage_hours" id="usage_hours" required class="w-full px-4 py-2 border rounded">
-        </div>
+    <!-- 3. Uso diario -->
+    <div class="bg-white rounded-2xl shadow-md p-6 space-y-1">
+      <label for="usage_hours" class="block font-bold text-lg text-gray-800">
+        3. Horas promedio de uso diario de redes sociales
+      </label>
+      <p class="text-sm text-gray-600">
+        En promedio, ¿cuántas horas al día usas redes sociales?
+      </p>
+      <input type="number" name="usage_hours" id="usage_hours" step="0.1" min="0" max="24"
+        placeholder="Horas en promedio"
+        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
+    </div>
 
-        <div>
-            <label for="platform" class="block text-gray-700 font-bold mb-2">Plataforma más usada</label>
-            <select name="platform" id="platform" required class="w-full px-4 py-2 border rounded">
-                <option value="">Selecciona</option>
-                <option value="0">Facebook</option>
-                <option value="1">Instagram</option>
-                <option value="2">TikTok</option>
-                <option value="3">Twitter</option>
-                <option value="4">YouTube</option>
-                <option value="5">LinkedIn</option>
-                <option value="6">Snapchat</option>
-                <option value="7">Line</option>
-                <option value="8">KakaoTalk</option>
-                <option value="9">VKontakte</option>
-                <option value="10">WhatsApp</option>
-                <option value="11">WeChat</option>
-            </select>
-        </div>
+    <!-- 4. Sueño -->
+    <div class="bg-white rounded-2xl shadow-md p-6 space-y-1">
+      <label for="sleep_hours" class="block font-bold text-lg text-gray-800">
+        4. Horas de sueño por noche
+      </label>
+      <p class="text-sm text-gray-600">
+        En promedio, ¿cuántas horas duermes cada noche?
+      </p>
+      <input type="number" name="sleep_hours" id="sleep_hours" step="0.1" min="0" max="12"
+        placeholder="Horas en promedio"
+        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
+    </div>
 
-        <div>
-            <label class="block text-gray-700 font-bold mb-2">¿Afecta tu rendimiento académico?</label>
-            <div class="flex gap-4">
-                <label><input type="radio" name="academic_impact" value="1" required> Sí</label>
-                <label><input type="radio" name="academic_impact" value="0"> No</label>
-            </div>
-        </div>
+    <!-- 5. Impacto académico -->
+    <div class="bg-white rounded-2xl shadow-md p-6 space-y-1">
+      <label for="academic_impact" class="block font-bold text-lg text-gray-800">
+        5. ¿Sientes que las redes sociales afectan tu rendimiento académico?
+      </label>
+      <p class="text-sm text-gray-600">
+        ¿Crees que el uso de redes sociales afecta tu desempeño en la escuela o universidad?
+      </p>
+      <select name="academic_impact" id="academic_impact" required
+        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <option value="">Selecciona tu respuesta</option>
+        <option value="1">Sí</option>
+        <option value="0">No</option>
+      </select>
+    </div>
 
-        <div>
-            <label for="sleep_hours" class="block text-gray-700 font-bold mb-2">¿Cuantas horas duermes en la noche?</label>
-            <input type="number" step="0.1" min="0" max="12" name="sleep_hours" id="sleep_hours" required class="w-full px-4 py-2 border rounded">
-        </div>
+    <!-- 6. Conflictos -->
+    <div class="bg-white rounded-2xl shadow-md p-6 space-y-1">
+      <label for="conflict_level" class="block font-bold text-lg text-gray-800">
+        6. Relaciones
+      </label>
+      <p class="text-sm text-gray-600">
+        ¿Con qué frecuencia tienes desacuerdos o conflictos con otras personas?
+      </p>
+      <select name="conflict_level" id="conflict_level" required
+        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <option value="">Selecciona tu respuesta</option>
+        <option value="0">Nunca</option>
+        <option value="1">Rara vez</option>
+        <option value="2">A veces</option>
+        <option value="3">Frecuentemente</option>
+        <option value="4">Muy frecuentemente</option>
+      </select>
+    </div>
 
+    <!-- Botón -->
+    <div class="text-center md:text-left">
+      <button type="submit"
+        class="bg-[#A2CDFF] hover:bg-[#005BC2] text-[#005BC2] hover:text-[#A2CDFF] font-semibold py-3 px-8 rounded-full transition">
+        Enviar
+      </button>
+    </div>
 
-        <div>
-            <label for="relationship" class="block text-gray-700 font-bold mb-2">Estado de relación</label>
-            <select name="relationship" id="relationship" required class="w-full px-4 py-2 border rounded">
-                <option value="">Selecciona</option>
-                <option value="0">Complicado</option>
-                <option value="1">En una relación</option>
-                <option value="2">Soltero</option>
-            </select>
-        </div>
-
-        <!-- Conflictos por redes sociales -->
-        <div>
-            <label for="conflicts" class="block text-gray-700 font-bold mb-2">¿Cuantos conflictos has tenido en redes sociales?</label>
-            <input type="number" name="conflicts" id="conflicts" min="0" max="10" class="w-full px-4 py-2 border rounded">
-        </div>
-
-        <!-- Puntaje de adicción -->
-        <div>
-            <label for="addiction" class="block text-gray-700 font-bold mb-2">¿Que tan adicto te consideras? (1-10)</label>
-            <input type="number" name="addiction" id="addiction" min="1" max="10" required class="w-full px-4 py-2 border rounded">
-        </div>
-
-        <!-- Botón de envío -->
-        <div class="text-center">
-            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded">
-                Enviar respuestas
-            </button>
-        </div>
-    </form>
+    
+  </form>
 </body>
+
 </html>
