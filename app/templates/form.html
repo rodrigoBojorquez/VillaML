@@ -59,21 +59,38 @@
     <!-- 2. Nivel académico -->
     <div class="bg-white rounded-2xl shadow-md p-6 space-y-2">
       <label for="academic_level" class="block font-bold text-lg text-gray-800">
-        2. Nivel académico
+        2. Academic Level
       </label>
       <select name="academic_level" id="academic_level" required
         class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
-        <option value="">Selecciona tu nivel académico</option>
-        <option value="0">Preparatoria</option>
-        <option value="1">Universidad – Licenciatura</option>
-        <option value="2">Universidad – Posgrado</option>
+        <option value="">Select your academic level</option>
+        <option value="High School">High School</option>
+        <option value="Undergraduate">Undergraduate</option>
+        <option value="Graduate">Graduate</option>
       </select>
     </div>
+
+    <!-- 3. Gender -->
+    <div class="bg-white rounded-2xl shadow-md p-6 space-y-2">
+      <label for="gender" class="block font-bold text-lg text-gray-800">
+        3. Gender
+      </label>
+      <select name="gender" id="gender" required
+        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <option value="">Select your gender</option>
+        <option value="Female">Female</option>
+        <option value="Male">Male</option>
+      </select>
+    </div>
+
+    <!-- Campo oculto: País -->
+    <input type="hidden" name="country" id="country" value="Mexico" />
+
 
     <!-- 3. Uso diario -->
     <div class="bg-white rounded-2xl shadow-md p-6 space-y-1">
       <label for="usage_hours" class="block font-bold text-lg text-gray-800">
-        3. Horas promedio de uso diario de redes sociales
+        4. Horas promedio de uso diario de redes sociales
       </label>
       <p class="text-sm text-gray-600">
         En promedio, ¿cuántas horas al día usas redes sociales?
@@ -83,10 +100,33 @@
         class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
     </div>
 
+    <!-- Plataforma más usada -->
+    <div class="bg-white rounded-2xl shadow-md p-6 space-y-2">
+      <label for="most_used_platform" class="block font-bold text-lg text-gray-800">
+        5. Red social más usada
+      </label>
+      <select name="most_used_platform" id="most_used_platform" required
+        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <option value="">Selecciona una red social</option>
+        <option value="Instagram">Instagram</option>
+        <option value="TikTok">TikTok</option>
+        <option value="Facebook">Facebook</option>
+        <option value="Twitter">Twitter</option>
+        <option value="YouTube">YouTube</option>
+        <option value="Snapchat">Snapchat</option>
+        <option value="LinkedIn">LinkedIn</option>
+        <option value="WhatsApp">WhatsApp</option>
+        <option value="WeChat">WeChat</option>
+        <option value="LINE">LINE</option>
+        <option value="KakaoTalk">KakaoTalk</option>
+        <option value="VKontakte">VKontakte</option>
+      </select>
+    </div>
+
     <!-- 4. Sueño -->
     <div class="bg-white rounded-2xl shadow-md p-6 space-y-1">
       <label for="sleep_hours" class="block font-bold text-lg text-gray-800">
-        4. Horas de sueño por noche
+        6. Horas de sueño por noche
       </label>
       <p class="text-sm text-gray-600">
         En promedio, ¿cuántas horas duermes cada noche?
@@ -96,10 +136,10 @@
         class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
     </div>
 
-    <!-- 5. Impacto académico -->
+    <!-- 6. Impacto académico -->
     <div class="bg-white rounded-2xl shadow-md p-6 space-y-1">
       <label for="academic_impact" class="block font-bold text-lg text-gray-800">
-        5. ¿Sientes que las redes sociales afectan tu rendimiento académico?
+        7. ¿Sientes que las redes sociales afectan tu rendimiento académico?
       </label>
       <p class="text-sm text-gray-600">
         ¿Crees que el uso de redes sociales afecta tu desempeño en la escuela o universidad?
@@ -112,24 +152,36 @@
       </select>
     </div>
 
-    <!-- 6. Conflictos -->
+    <!-- 8. Conflictos por redes sociales -->
     <div class="bg-white rounded-2xl shadow-md p-6 space-y-1">
-      <label for="conflict_level" class="block font-bold text-lg text-gray-800">
-        6. Relaciones
+      <label for="conflicts_over_social_media" class="block font-bold text-lg text-gray-800">
+        8. Conflictos por redes sociales
       </label>
       <p class="text-sm text-gray-600">
-        ¿Con qué frecuencia tienes desacuerdos o conflictos con otras personas?
+        ¿Cuántos conflictos con otras personas has tenido en redes sociales?
       </p>
-      <select name="conflict_level" id="conflict_level" required
+      <input type="number" name="conflicts_over_social_media" id="conflicts_over_social_media"
+        min="0" required
+        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
+    </div>
+
+      <!-- 9. Relación amorosa -->
+    <div class="bg-white rounded-2xl shadow-md p-6 space-y-1">
+      <label for="relationship_status" class="block font-bold text-lg text-gray-800">
+        9. Relación actual
+      </label>
+      <p class="text-sm text-gray-600">
+        ¿Tienes actualmente una relación amorosa?
+      </p>
+      <select name="relationship_status" id="relationship_status" required
         class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
         <option value="">Selecciona tu respuesta</option>
-        <option value="0">Nunca</option>
-        <option value="1">Rara vez</option>
-        <option value="2">A veces</option>
-        <option value="3">Frecuentemente</option>
-        <option value="4">Muy frecuentemente</option>
+        <option value="0">No</option>
+        <option value="1">Sí</option>
       </select>
     </div>
+
+
 
     <!-- Botón -->
     <div class="text-center md:text-left">
