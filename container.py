@@ -5,7 +5,7 @@ from config.settings import Settings
 
 class Container(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
-        packages=["app.api", "app.application", "app.infrastructure", "app.domain"]
+        packages=["app.api", "app.application", "app.infrastructure", ]
     )
     settings = providers.Singleton(Settings)
 
