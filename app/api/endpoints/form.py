@@ -16,6 +16,14 @@ def show_form(request: Request, success: Optional[bool] = False):
         "request": request,
         "success": success
     })
+    
+@router.get("/landing", response_class=HTMLResponse)
+def show_form(request: Request, success: Optional[bool] = False):
+    return templates.TemplateResponse("landing.html", {
+        "request": request,
+        "success": success
+    })
+
 
 
 @router.post("")
