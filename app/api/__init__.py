@@ -7,7 +7,7 @@ from fastapi import FastAPI
 #     ainit_record_manager,
 #     ainit_vector_store,
 # )
-from .endpoints import models, dashboard, form, run
+from .endpoints import models, dashboard, form, run, landing
 from container import Container
 from ..infrastructure.data.init_db import init_db
 
@@ -32,5 +32,5 @@ app = FastAPI(
 app.include_router(models.router)
 app.include_router(dashboard.router)
 app.include_router(form.router)
-
+app.include_router(landing.router)
 app.include_router(run.router)
