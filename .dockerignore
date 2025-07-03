@@ -1,0 +1,35 @@
+# Archivos de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+
+# Entornos virtuales locales
+.venv/
+venv/
+env/
+
+# Archivos de configuración del sistema
+.DS_Store
+Thumbs.db
+
+# Control de versiones
+.git/
+.gitignore
+
+# Archivos temporales y logs
+*.log
+*.tmp
+*.swp
+
+# Otros archivos innecesarios
+docker-compose.yml
+Dockerfile
+README.md
+*.pem
+*.key
+*.crt
+*.env
+.env.*
