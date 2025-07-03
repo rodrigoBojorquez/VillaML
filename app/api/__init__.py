@@ -1,5 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
+
 # from app.api.http.middlewares import configure_middlewares
 # from app.api.openapi import custom_openapi
 # from app.infrastructure.common.tasks import (
@@ -23,10 +25,19 @@ async def lifespan(application: FastAPI):
 
     yield
 
+
 app = FastAPI(
     title="LIA - Service",
     docs_url="/swagger",
     lifespan=lifespan,
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # ⚠️ Cambia por tu dominio frontend en prod
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(data.router)

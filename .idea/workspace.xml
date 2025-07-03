@@ -5,27 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e21eb7e9-cd2f-4311-b48a-9c53f4a015e7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/api/endpoints/data.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/infrastructure/data/responses.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/VillaML.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pipfile" beforeDir="false" afterPath="$PROJECT_DIR$/Pipfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pipfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Pipfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/api/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/endpoints/assistants.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/endpoints/dashboard.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/endpoints/export.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/endpoints/data.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/api/endpoints/form.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/form.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/endpoints/models.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/api/endpoints/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/run.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/dashboard.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/form.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/models.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/infrastructure/data/responses.csv" beforeDir="false" afterPath="$PROJECT_DIR$/app/infrastructure/data/responses.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/infrastructure/models/load_models.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,23 +36,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "villa",
-    "last_opened_file_path": "/home/fernando/Escritorio/Proyectos/Proyectos.Python/Proyectos.Fastapi/VillaML/app/infrastructure",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;villa&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/fernando/Escritorio/Proyectos/Proyectos.Python/Proyectos.Fastapi/VillaML/app/infrastructure/data&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/app/infrastructure" />
       <recent name="$PROJECT_DIR$/app/infrastructure/data" />
+      <recent name="$PROJECT_DIR$/app/infrastructure" />
       <recent name="$PROJECT_DIR$/app/api/endpoints" />
       <recent name="$PROJECT_DIR$/app/templates" />
     </key>
@@ -93,10 +79,25 @@
       <workItem from="1751219772556" duration="10228000" />
       <workItem from="1751493973960" duration="10819000" />
       <workItem from="1751553593508" duration="3521000" />
+      <workItem from="1751572773136" duration="3301000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="LAST_COMMIT_MESSAGE" value="" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/app/api/endpoints/run.py</url>
+          <line>1</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

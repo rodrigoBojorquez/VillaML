@@ -9,7 +9,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.kernel_ridge import KernelRidge
 from sklearn.ensemble import RandomForestRegressor
 
-
 router = APIRouter(prefix="/run")
 templates = Jinja2Templates(directory="app/templates")
 
@@ -22,16 +21,19 @@ class PredictInput(BaseModel):
     Country_num: int
     Avg_Daily_Usage_Hours: float
     Most_Used_Platform_num: int
-    Affects_Academic_Performance_num: int
     Sleep_Hours_Per_Night: float
     Relationship_Status_num: int
     Conflicts_Over_Social_Media: int
-
+    Affects_Academic_Performance: int
 
 @router.post("/process")
 def process_data():
     df = pd.read_csv('app/infrastructure/data/responses.csv')
 
+    # Eliminar columna vacía si existe
+    df = df.drop(columns=['Unnamed: 11'], errors='ignore')
+
+    # Calcular scores como antes
     def calc_scores(row):
         usage_hours = row['Avg_Daily_Usage_Hours']
         academic_impact = row['Affects_Academic_Performance']
@@ -67,15 +69,15 @@ def process_data():
 
     df[['addicted_score', 'mental_health_score']] = df.apply(calc_scores, axis=1)
 
-    # Convertir columnas no numéricas en columnas numéricas _num
+    # Crear columnas _num solo para columnas no numéricas y que no terminen en _num ya
     for col in df.columns:
-        if not pd.api.types.is_numeric_dtype(df[col]):
+        if not col.endswith('_num') and not pd.api.types.is_numeric_dtype(df[col]):
             df[f"{col}_num"] = pd.factorize(df[col])[0]
 
-    # Guardar cambios sobrescribiendo el archivo
+    # Guardar CSV limpio
     df.to_csv('app/infrastructure/data/responses.csv', index=False)
 
-    return {"message": "Archivo modificado y guardado con nuevas columnas y versiones numéricas."}
+    return {"message": "Archivo modificado y guardado con nuevas columnas numéricas."}
 
 
 @router.post("/train")
@@ -91,7 +93,7 @@ def train_models():
         'Academic_Level_num',
         'Country_num',
         'Most_Used_Platform_num',
-        'Affects_Academic_Performance_num',
+        'Affects_Academic_Performance',
         'Relationship_Status_num'
     ]
 
@@ -119,14 +121,29 @@ def train_models():
         "features_usadas": features
     }
 
+
 @router.post("/predict")
 def predict(data: PredictInput):
-    # Cargar modelos
+    # Cargar modelos directamente
     model_add = joblib.load("app/infrastructure/data/models/model_addiction.pkl")
     model_mh = joblib.load("app/infrastructure/data/models/model_mental_health.pkl")
 
-    # Convertir input a DataFrame
-    input_df = pd.DataFrame([data.dict()])
+    # Definir el orden esperado de las columnas
+    features = [
+        'Age',
+        'Avg_Daily_Usage_Hours',
+        'Sleep_Hours_Per_Night',
+        'Conflicts_Over_Social_Media',
+        'Gender_num',
+        'Academic_Level_num',
+        'Country_num',
+        'Most_Used_Platform_num',
+        'Affects_Academic_Performance',
+        'Relationship_Status_num'
+    ]
+
+    # Asegurar que las columnas estén en el orden correcto
+    input_df = pd.DataFrame([data.dict()])[features]
 
     # Predecir
     pred_add = model_add.predict(input_df)[0]
