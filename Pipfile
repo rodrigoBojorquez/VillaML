@@ -8,10 +8,13 @@ fastapi = {extras = ["standard"], version = "*"}
 dependency-injector = "*"
 loguru = "*"
 pydantic-settings = "*"
-joblib = "*"
-pandas = "*"
 sqlalchemy = "*"
 openpyxl = "*"
+pandas = "*"
+matplotlib = "*"
+seaborn = "*"
+scikit-learn = "*"
+joblib = "*"
 
 [dev-packages]
 

@@ -5,133 +5,11 @@ from typing import Optional, List
 from pathlib import Path
 import csv
 import json
+import joblib
+import pandas as pd
+import numpy as np
 
 router = APIRouter(prefix="/form", tags=["Form"])
-templates = Jinja2Templates(directory="app/templates")
-
-
-@router.get("", response_class=HTMLResponse)
-def show_form(request: Request, success: Optional[bool] = False):
-    return templates.TemplateResponse("form.html", {
-        "request": request,
-        "success": success
-    })
-
-
-@router.post("")
-async def process_form(
-    request: Request,
-    age: int = Form(...),
-    academic_level: str = Form(...),
-    gender: str = Form(...),
-    country: str = Form(...),
-    usage_hours: Optional[float] = Form(0.0),
-    most_used_platform: str = Form(...),
-    sleep_hours: Optional[float] = Form(0.0),
-    academic_impact: int = Form(...),
-    conflicts_over_social_media: int = Form(...),
-    relationship_status: int = Form(...)
-):
-    json_file = Path("app/infrastructure/data/responses.json")
-    responses = []
-
-    # Crear archivo vacío si no existe
-    if not json_file.exists():
-        json_file.parent.mkdir(parents=True, exist_ok=True)  # Crear carpeta si no existe
-        with json_file.open("w", encoding="utf-8") as jf:
-            jf.write("[]")  # Escribir lista vacía
-
-    # Leer respuestas previas
-    try:
-        with json_file.open("r", encoding="utf-8") as jf:
-            responses = json.load(jf)
-    except json.JSONDecodeError:
-        responses = []
-
-    # Leer respuestas previas para obtener el nuevo ID
-    if json_file.exists():
-        try:
-            with json_file.open("r", encoding="utf-8") as jf:
-                responses = json.load(jf)
-        except json.JSONDecodeError:
-            responses = []
-
-    new_id = len(responses) + 1
-
-    # Cálculo de Addicted_Score
-    addicted_score = (
-        (usage_hours * 10)
-        + (10 if academic_impact == 1 else 0)
-        + (10 if conflicts_over_social_media == 1 else 0)
-        - (sleep_hours * 2)
-    )
-
-    if most_used_platform.lower() in ["tiktok", "instagram"]:
-        addicted_score += 10
-    elif most_used_platform.lower() == "snapchat":
-        addicted_score += 5
-
-    if relationship_status == 1:  # Suponiendo 1 = Single
-        addicted_score += 5
-
-    addicted_score = max(0, min(100, addicted_score))
-
-    # Cálculo de Mental_Health_Score
-    mental_health_score = (
-        100
-        - (addicted_score * 0.4)
-        - (10 if academic_impact == 1 else 0)
-        - (10 if conflicts_over_social_media == 1 else 0)
-        + (sleep_hours * 2)
-    )
-    mental_health_score = max(0, min(100, mental_health_score))
-
-    data_with_id = {
-        "id": new_id,
-        "age": age,
-        "academic_level": academic_level,
-        "gender": gender,
-        "country": country,
-        "daily_usage": usage_hours,
-        "most_used_platform": most_used_platform,
-        "sleep_hours": sleep_hours,
-        "academic_impact": academic_impact,
-        "conflicts": conflicts_over_social_media,
-        "relationship_status": relationship_status,
-        "addicted_score": round(addicted_score, 2),
-        "mental_health_score": round(mental_health_score, 2),
-    }
-
-    csv_file = Path("app/infrastructure/data/responses.csv")
-    csv_file.parent.mkdir(parents=True, exist_ok=True)
-    csv_exists = csv_file.exists()
-
-    with csv_file.open("a", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=data_with_id.keys())
-        if not csv_exists:
-            writer.writeheader()
-        writer.writerow(data_with_id)
-
-    responses.append(data_with_id)
-    with json_file.open("w", encoding="utf-8") as jf:
-        json.dump(responses, jf, indent=2, ensure_ascii=False)
-
-    return RedirectResponse(url="/form?success=true", status_code=302)
-
-@router.get("/responses", response_class=JSONResponse)
-def view_responses():
-    json_file = Path("app/infrastructure/data/responses.json")
-
-    if json_file.exists():
-        try:
-            with json_file.open("r", encoding="utf-8") as f:
-                data = json.load(f)
-            return JSONResponse(content=data, status_code=200)
-        except json.JSONDecodeError:
-            return JSONResponse(content={"error": "The JSON file is corrupted."}, status_code=500)
-    else:
-        return JSONResponse(content={"message": "No data available."}, status_code=404)
-
 
 @router.post("/bulk", response_class=JSONResponse)
 async def bulk_register(data: List[dict] = Body(...)):
@@ -207,19 +85,19 @@ async def bulk_register(data: List[dict] = Body(...)):
         mental_health_score = max(0, min(100, mental_health_score))
 
         record = {
-            "id": current_id,
-            "age": int(entry.get("age", 0)),
-            "academic_level": entry.get("academic_level", ""),
-            "gender": entry.get("gender", ""),
-            "country": entry.get("country", ""),
-            "daily_usage": usage_hours,
-            "most_used_platform": entry.get("most_used_platform", ""),
-            "sleep_hours": sleep_hours,
-            "academic_impact": academic_impact,
-            "conflicts": conflicts,
-            "relationship_status": relationship_status,
+            "Student_ID": current_id,
+            "Age": int(entry.get("age", 0)),
+            "Gender": entry.get("gender", ""),
+            "Academic_Level": entry.get("academic_level", ""),
+            "Country": entry.get("country", ""),
+            "Avg_Daily_Usage_Hours": usage_hours,
+            "Most_Used_Platform": entry.get("most_used_platform", ""),
+            "Affects_Academic_Performance": academic_impact,
+            "Sleep_Hours_Per_Night": sleep_hours,
+            "Relationship_Status": relationship_status,
+            "Conflicts_Over_Social_Media": conflicts,
             "addicted_score": round(addicted_score, 2),
-            "mental_health_score": round(mental_health_score, 2),
+            "mental_health_score": round(mental_health_score, 2)
         }
 
         new_entries.append(record)
@@ -238,3 +116,71 @@ async def bulk_register(data: List[dict] = Body(...)):
         writer.writerows(new_entries)
 
     return JSONResponse(content={"message": f"{len(new_entries)} records added successfully."}, status_code=201)
+
+@router.post("")
+async def handle_form(
+    request: Request,
+    age: int = Form(...),
+    academic_level: str = Form(...),
+    gender: str = Form(...),
+    country: str = Form(...),
+    usage_hours: Optional[float] = Form(0.0),
+    most_used_platform: str = Form(...),
+    sleep_hours: Optional[float] = Form(0.0),
+    academic_impact: int = Form(...),
+    conflicts_over_social_media: int = Form(...),
+    relationship_status: int = Form(...)
+):
+    # Binarizar género (male=1, else 0)
+    gender_bin = 1 if gender.lower() == "male" else 0
+
+    data = {
+        "Age": age,
+        "Avg_Daily_Usage_Hours": usage_hours,
+        "Sleep_Hours_Per_Night": sleep_hours,
+        "Conflicts_Over_Social_Media": conflicts_over_social_media,
+        "Gender": gender_bin,
+    }
+
+    row = pd.DataFrame([data])
+
+    model_addiction = joblib.load("app/infrastructure/data/models/model_addiction.pkl")
+    model_mental = joblib.load("app/infrastructure/data/models/model_mental_health.pkl")
+
+    addiction_pred = model_addiction.predict(row)[0]
+    mental_pred = model_mental.predict(row)[0]
+
+    # Limitar predicciones a rango [0, 100]
+    addiction_pred = addiction_pred
+    mental_pred = mental_pred
+
+    addicted_score = (
+        (usage_hours * 10)
+        + (10 if academic_impact == 1 else 0)
+        + (10 if conflicts_over_social_media == 1 else 0)
+        - (sleep_hours * 2)
+    )
+
+    if most_used_platform.lower() in ["tiktok", "instagram"]:
+        addicted_score += 10
+
+
+    if relationship_status == 0:
+        addicted_score += 5
+
+    addicted_score = max(0, min(100, addicted_score))
+
+    # Cálculo de Mental_Health_Score
+    mental_health_score = (
+        100
+        - (addicted_score * 0.4)
+        - (10 if academic_impact == 1 else 0)
+        - (10 if conflicts_over_social_media == 1 else 0)
+        + (sleep_hours * 2)
+    )
+    mental_health_score = max(0, min(100, mental_health_score))
+
+
+    return RedirectResponse(
+        status_code=200
+    )
