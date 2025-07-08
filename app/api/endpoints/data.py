@@ -30,11 +30,33 @@ def get_chart_data():
 
     # 5. Average Use per Age Cluster
     avg_use_age_cluster = df.groupby("age_cluster")["Avg_Daily_Usage_Hours"].mean().reset_index()
+    
+    # 6. Average Use per Age by Gender
+    avg_use_age_gender = df.groupby(["Age", "Gender"])["Avg_Daily_Usage_Hours"].mean().reset_index()
+    
+    # 7. Average addiction per Age by Gender
+    avg_addiction_age_gender = df.groupby(["Age", "Gender"])["addicted_score"].mean().reset_index()
+    
+    # 8. Average addiction by Sleep hours
+    df["Sleep_Hours_Per_Night"] = df["Sleep_Hours_Per_Night"].astype(float).round()
+    avg_addiction_sleep = df.groupby("Sleep_Hours_Per_Night")["addicted_score"].mean().reset_index().sort_values("Sleep_Hours_Per_Night")
+    
+    # 9. Average mental health by Age
+    avg_mh_age = df.groupby("Age")["mental_health_score"].mean().reset_index().sort_values("Age")
+    
+    # 10. Average mental health by use
+    df["Avg_Daily_Usage_Hours"] = df["Avg_Daily_Usage_Hours"].astype(float).round()
+    avg_mh_use = df.groupby("Avg_Daily_Usage_Hours")["mental_health_score"].mean().reset_index().sort_values("Avg_Daily_Usage_Hours")
 
     return {
         "academic_vs_addiction": academic_vs_addiction_data.to_dict(orient="records"),
         "age_clusters": age_clusters_data.to_dict(orient="records"),
         "age_prediction": age_range.to_dict(orient="records"),
         "average_use": avg_use_data.to_dict(orient="records"),
-        "average_use_age_cluster": avg_use_age_cluster.to_dict(orient="records")
+        "average_use_age_cluster": avg_use_age_cluster.to_dict(orient="records"),
+        "average_use_age_gender": avg_use_age_gender.to_dict(orient="records"),
+        "average_addiction_age_gender": avg_addiction_age_gender.to_dict(orient="records"),
+        "average_addiction_sleep": avg_addiction_sleep.to_dict(orient="records"),
+        "average_mh_age": avg_mh_age.to_dict(orient="records"),
+        "average_mh_use": avg_mh_use.to_dict(orient="records"),
     }

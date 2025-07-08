@@ -4,6 +4,7 @@ from fastapi.templating import Jinja2Templates
 from pandas import factorize
 from pydantic import BaseModel
 import pandas as pd
+from xgboost import XGBRegressor
 import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.kernel_ridge import KernelRidge
@@ -118,6 +119,66 @@ def train_models():
 
     return {
         "message": "Modelos de regresión entrenados y guardados correctamente",
+        "features_usadas": features
+    }
+    
+@router.post("/train2")
+def train_models():
+    df = pd.read_csv('app/infrastructure/data/responses.csv')
+    df_complete = df[df['Avg_Daily_Usage_Hours'].notnull()]
+    df_sleep = df[df['Sleep_Hours_Per_Night'].notnull()]
+
+    features = [
+        'Age',
+        'Sleep_Hours_Per_Night',
+        'Conflicts_Over_Social_Media',
+        'Gender_num',
+        'Academic_Level_num',
+        'Country_num',
+        'Most_Used_Platform_num',
+        'Affects_Academic_Performance',
+        'Relationship_Status_num',
+        'addicted_score',
+        'mental_health_score'
+    ]
+    
+    features_sleep = features.copy()
+    features_sleep.insert(5, 'Avg_Daily_Usage_Hours')
+    features_sleep.pop(1)
+
+    X_usage = df_complete[features]
+    y_usage = df_complete['Avg_Daily_Usage_Hours']
+    
+    X_sleep = df_sleep[features_sleep]
+    y_sleep = df_sleep['Sleep_Hours_Per_Night']
+
+    X_train, X_test, y_train, y_test = train_test_split(X_usage, y_usage, test_size=0.2, random_state=42)
+    X_train_sleep, X_test_sleep, y_train_sleep, y_test_sleep = train_test_split(X_sleep, y_sleep, test_size=0.2, random_state=42)
+    
+    def make_model():
+        return XGBRegressor(
+            n_estimators=100,
+            max_depth=5,
+            learning_rate=0.1,
+            subsample=0.8,
+            colsample_bytree=0.8,
+            random_state=42
+    )
+        
+    model_sleep = make_model()
+    model_usage = make_model()
+
+    model_usage.fit(X_train, y_train)
+    model_sleep.fit(X_train_sleep, y_train_sleep)
+    
+    try:
+        joblib.dump(model_usage, "app/infrastructure/data/models/model_avg_daily_use.pkl")
+        joblib.dump(model_sleep, "app/infrastructure/data/models/model_sleep_per_night.pkl")
+    except Exception as e:
+        return {"error": f"Failed to save model: {str(e)}"}
+    
+    return {
+        "message": "Modelos de regresión XGB entrenado y guardados correctamente",
         "features_usadas": features
     }
 
