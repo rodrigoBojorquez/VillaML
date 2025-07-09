@@ -181,8 +181,132 @@ def train_models():
         "message": "Modelos de regresión XGB entrenado y guardados correctamente",
         "features_usadas": features
     }
+    
+@router.post("/age_basedOnAdd")
+def train_models():
+    df = pd.read_csv('app/infrastructure/data/responses.csv')
 
+    X = df[["addicted_score"]]
+    y = df["Age"]
+    
+    model = XGBRegressor(
+            n_estimators=100,
+            max_depth=5,
+            learning_rate=0.1,
+            subsample=0.8,
+            colsample_bytree=0.8,
+            random_state=42
+    ).fit(X, y) 
+        
+    try:
+        joblib.dump(model, "app/infrastructure/data/models/model_Age_based_on_add.pkl")
+    except Exception as e:
+        return {"error": f"Failed to save model: {str(e)}"}
+    
+    return {
+        "message": "Modelos de regresión XGB entrenado y guardados correctamente",
+    }
+    
+@router.post("/use_basedOnAdd")
+def train_models():
+    df = pd.read_csv('app/infrastructure/data/responses.csv')
 
+    X = df["addicted_score"]
+    y = df["Avg_Daily_Usage_Hours"]
+    
+    model = XGBRegressor(
+            n_estimators=100,
+            max_depth=5,
+            learning_rate=0.1,
+            subsample=0.8,
+            colsample_bytree=0.8,
+            random_state=42
+    ).fit(X, y) 
+        
+    try:
+        joblib.dump(model, "app/infrastructure/data/models/model_Use_based_on_add.pkl")
+    except Exception as e:
+        return {"error": f"Failed to save model: {str(e)}"}
+    
+    return {
+        "message": "Modelos de regresión XGB entrenado y guardados correctamente",
+    }
+
+@router.post("/add_basedOnSleep")
+def train_models():
+    df = pd.read_csv('app/infrastructure/data/responses.csv')
+
+    X = df[["Sleep_Hours_Per_Night"]]
+    y = df["addicted_score"]
+    
+    model = XGBRegressor(
+            n_estimators=100,
+            max_depth=5,
+            learning_rate=0.1,
+            subsample=0.8,
+            colsample_bytree=0.8,
+            random_state=42
+    ).fit(X, y) 
+        
+    try:
+        joblib.dump(model, "app/infrastructure/data/models/model_Add_based_on_sleep.pkl")
+    except Exception as e:
+        return {"error": f"Failed to save model: {str(e)}"}
+    
+    return {
+        "message": "Modelos de regresión XGB entrenado y guardados correctamente",
+    }
+    
+@router.post("/mh_basedOnAge")
+def train_models():
+    df = pd.read_csv('app/infrastructure/data/responses.csv')
+
+    X = df[["Age"]]
+    y = df["mental_health_score"]
+    
+    model = XGBRegressor(
+            n_estimators=100,
+            max_depth=5,
+            learning_rate=0.1,
+            subsample=0.8,
+            colsample_bytree=0.8,
+            random_state=42
+    ).fit(X, y) 
+        
+    try:
+        joblib.dump(model, "app/infrastructure/data/models/model_mh_based_on_age.pkl")
+    except Exception as e:
+        return {"error": f"Failed to save model: {str(e)}"}
+    
+    return {
+        "message": "Modelos de regresión XGB entrenado y guardados correctamente",
+    }
+    
+@router.post("/mh_basedOnUse")
+def train_models():
+    df = pd.read_csv('app/infrastructure/data/responses.csv')
+
+    X = df[["Avg_Daily_Usage_Hours"]]
+    y = df["mental_health_score"]
+    
+    model = XGBRegressor(
+            n_estimators=100,
+            max_depth=5,
+            learning_rate=0.1,
+            subsample=0.8,
+            colsample_bytree=0.8,
+            random_state=42
+    ).fit(X, y) 
+        
+    try:
+        joblib.dump(model, "app/infrastructure/data/models/model_mh_based_on_use.pkl")
+    except Exception as e:
+        return {"error": f"Failed to save model: {str(e)}"}
+    
+    return {
+        "message": "Modelos de regresión XGB entrenado y guardados correctamente",
+    }
+    
 @router.post("/predict")
 def predict(data: PredictInput):
     # Cargar modelos directamente
@@ -214,3 +338,4 @@ def predict(data: PredictInput):
         "Addiction_prediction": pred_add,
         "Mental_Health_prediction": pred_mh
     }
+
